@@ -1,6 +1,7 @@
 /*
  * Main Fire Source Location Program
- * This code will drive the board that will collect data from the IR/UV sensors
+ * This code will 
+ * drive the board that will collect data from the IR/UV sensors
  * This code will then use this data to calculate the location
  * This code will then send coordinates to RC control board and to the LCD board
  * This code will also send coordinates to website (if time permits)
@@ -11,14 +12,19 @@
 
 #include <SoftwareSerial.h>
 #include <Servo.h>
+#include <SPI.h>
+#include "Wire.h"
+
 
 //Global variables
 const float Pi = 3.14159;
 const int DISTANCE = 33;
+const int slaveSelectPin = 10;
 
 //PIN Declarations
 int servoPins[4]= {9, 3, 0, 0};
 int sensorPins[4] = {8, 7, 0, 0};
+int alarmPin = 13;
 
 int initial_angles[4] = {0, 0, 0, 0};  //initial angles of servos
 int xCoordinate = 0;  //get from David's Servo code
@@ -57,17 +63,24 @@ void setup()
 {
   // put your setup code here, to run once:
   
+  pinMode(alarmPin, OUTPUT);
   Serial.begin(9600); //begin serial
   //Print Information About Project
   Serial.println("FLAMESense");
   Serial.println("Northern Illinois University, Spring 2016");
   ServoSetup();
   //mySerial.begin(9600);   //software Serial port initializer (not needed yet)
+  // set the slaveSelectPin as an output:
+  //pinMode(slaveSelectPin, OUTPUT);
+  // initialize SPI:
+  SPI.begin();
+  Wire.begin();
 }
 
 void loop()
 {
   //check UV sensor for flame
+ 
   checkforFire();
 
   if(UV_Flame) {        //need UVSensor class for UV sensor with boolean variable indicating if flame is detected
@@ -78,7 +91,7 @@ void loop()
   else  {
     Timeout_Count++; 
     if (Timeout_Count >= 500000){
-      Serial.println("Timeout delay");
+     // Serial.println("Timeout delay");
       delay(Timeout_Delay);
       }
     }
@@ -89,18 +102,37 @@ void loop()
 //  Serial.println(" ");
   //delay(1000);
   if(LocationFound){
+      digitalWrite(alarmPin, HIGH);   // sets the LED on
+ 
       coordinates = (xCoordinate * 100 + yCoordinate);
       Serial.print("Cordinates to be sent: ");
       Serial.println(coordinates);
-     
+      
       //Separate coordinates
       x = coordinates >> 8;
       y = coordinates & mask;
-      
+//      delay(1000);                  // waits for a second
+//      digitalWrite(alarmPin, LOW);    // sets the LED off
+//      delay(5000);
       //Write coordinates to RC board (regular serial port) and to LCD board (mySerial port)
-      Serial.write(x);
+     // Serial.write(x);
      // mySerial.write(x);
-      Serial.write(y);
+      //Serial.write(y);
      // mySerial.write(y);
-    }
+  
+      Serial.println("Sending Location..");
+     SendLocation(8, 15);
+     
   }
+  }
+
+void SendLocation(int address, int value) {
+  // take the SS pin low to select the chip:
+  Wire.beginTransmission(8); // transmit to device #8
+  //Wire.write("x is ");        // sends five bytes
+  Wire.write(value);              // sends one byte
+  Wire.endTransmission();    // stop transmitting
+  delay(3000);
+  Serial.print("Location Sent...");
+}
+

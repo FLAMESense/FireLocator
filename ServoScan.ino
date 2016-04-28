@@ -6,7 +6,7 @@ void ServoSetup() {
   servo0.write(90);
   servo1.write(90);
   LocationFound = 0;
-  Serial.println("Servo Motors Initicialized at 90 degrees");
+  //Serial.println("Servo Motors Initicialized at 90 degrees");
   delay(5000);
 }
 
@@ -17,8 +17,8 @@ void ServoTest() {
   for (j; j<5; j++){
     int i = 0;
     while (i <= 180) {
-      Serial.print("Angle: ");
-      Serial.println(i);
+      //Serial.print("Angle: ");
+      //Serial.println(i);
       servo0.write(i);
       servo1.write(i);
       i = i + 45;
@@ -28,7 +28,7 @@ void ServoTest() {
 }
 
 void ServoScan() {
-  Serial.println("Scanning now...");
+  //Serial.println("Scanning now...");
   if(!LocationFound)  {
     int w = 0;
     int a = (90-w);
@@ -57,7 +57,7 @@ void ServoScan() {
       }
 
     if (beta != 0) {
-        Serial.println("Fire detected by Servo0 and Servo1! ");
+        //Serial.println("Fire detected by Servo0 and Servo1! ");
         delay(1000);
         alpha_check = servo0.read();
         beta_check = servo1.read();

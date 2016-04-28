@@ -9,8 +9,8 @@ void Triangulate (int ref1, int ref2)  {
   double d = DISTANCE;
   
  yCoordinate = (d * sina * sinb) / sinab;
- xCoordinate = yCoordinate * tant;                //not accurate
- int xCoordinate1 = yCoordinate/tanb;
+ xCoordinate =  yCoordinate/tanb;               
+ int xCoordinate1 = yCoordinate * tant; //not accurate
 
 /* If 4 servos are being used instead of 2
  if (ref1==0 && ref2 == 3){
@@ -32,11 +32,11 @@ void Triangulate (int ref1, int ref2)  {
  }*/
  
  LocationFound = 1;
- Serial.print("Location: ");
- Serial.print(xCoordinate);
- Serial.print(", ");
- Serial.print(yCoordinate);
- Serial.print(", ");
- Serial.println(xCoordinate1);
+// Serial.print("Location: ");
+// Serial.print(xCoordinate);
+// Serial.print(", ");
+// Serial.print(yCoordinate);
+// Serial.print(", ");
+// Serial.println(xCoordinate1);
  delay(5000);
 }
