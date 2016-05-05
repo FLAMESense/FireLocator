@@ -25,10 +25,13 @@ const int slaveSelectPin = 10;
 int servoPins[4]= {9, 3, 0, 0};
 int sensorPins[4] = {8, 7, 0, 0};
 int alarmPin = 13;
+int UVSensor = 12;
+int DockPin = 5;
 
 int initial_angles[4] = {0, 0, 0, 0};  //initial angles of servos
 int xCoordinate = 0;  //get from David's Servo code
 int yCoordinate = 0;  //get from David's Servo code
+int SetupAngle = 90;
 
 //Boolean variables for logic and debugging
 int ServoMoved[4] = {0, 0, 0, 0};     //holds boolean indicating movement each servo 
@@ -48,6 +51,7 @@ Servo servo0;   // create servo object to control servo on the left
 Servo servo1;   // create servo object to control servo on the right 
 Servo servo2;
 Servo servo3;
+Servo servo5;
 
 uint8_t ServoX = 0;
 uint8_t ServoY = 0;
@@ -64,24 +68,30 @@ void setup()
   // put your setup code here, to run once:
   
   pinMode(alarmPin, OUTPUT);
+  pinMode(UVSensor, INPUT);
   Serial.begin(9600); //begin serial
   //Print Information About Project
   Serial.println("FLAMESense");
   Serial.println("Northern Illinois University, Spring 2016");
   ServoSetup();
+  DockSetup();
   //mySerial.begin(9600);   //software Serial port initializer (not needed yet)
   // set the slaveSelectPin as an output:
   //pinMode(slaveSelectPin, OUTPUT);
   // initialize SPI:
-  SPI.begin();
-  Wire.begin();
+  //SPI.begin();
+  //Wire.begin();
 }
 
 void loop()
-{
-  //check UV sensor for flame
+  {
+  beta_check = 180;
+  RotateDock();
+  //checkforFire();
+  delay(2000);
+    //check UV sensor for flame
  
-  checkforFire();
+  
 
   if(UV_Flame) {        //need UVSensor class for UV sensor with boolean variable indicating if flame is detected
     //start servo motors
@@ -120,19 +130,10 @@ void loop()
       //Serial.write(y);
      // mySerial.write(y);
   
-      Serial.println("Sending Location..");
+     Serial.println("Sending Location..");
      SendLocation(8, 15);
-     
   }
-  }
-
-void SendLocation(int address, int value) {
-  // take the SS pin low to select the chip:
-  Wire.beginTransmission(8); // transmit to device #8
-  //Wire.write("x is ");        // sends five bytes
-  Wire.write(value);              // sends one byte
-  Wire.endTransmission();    // stop transmitting
-  delay(3000);
-  Serial.print("Location Sent...");
+  Serial.println("Iteration");
 }
+
 

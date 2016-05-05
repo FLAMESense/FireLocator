@@ -56,7 +56,7 @@ void ServoScan() {
         servo1.write(b);
       }
 
-    if (beta != 0) {
+    if (beta != 0 && alpha != 0) {
         //Serial.println("Fire detected by Servo0 and Servo1! ");
         delay(1000);
         alpha_check = servo0.read();
@@ -84,48 +84,12 @@ void ServoScan() {
     }
     */
     if(!LocationFound)    {
-      w = w + 5;
+      w = w + 1;
     }
     else {
       w = 91;
     }
-      delay(500);
+      delay(250);
   }
 }
 }
-
-
-/*
-void Servo_David() {
- for (alphaR = 0; alphaR <=0; alphaR += 1)// goes from 90 to zero 
- {
-   int fire0 = digitalRead(1);
-   servo0.write(alphaR);
-   if (fireR ==0)
-   {
-      alpha = servo1.read();
-     Serial.print("Fire detected on Right servo ");
-     break;
-   }
-     else;
-     Serial.print("Searching for fire...");
-   }
-   delay(15);
- 
- // convert to radians for computation
-int alphaf = ((180-(alphaR+alphaL)) * Pi)/180; 
-//int alphaR2; 
-//int alphaL2 = 0;  
- int alphaR2 = ((alphaL*Pi)/180);
- int alphaL2 = (alphaR*Pi)/180;
- 
- int side1 = d * (sin(alphaR)/sin(alphaf));
- int side2 = d * (sin(alphaL)/sin(alphaf));
- 
- //xy coordinates
- int x = side1 * sin((Pi/2) - alphaL);
- int y = side1 * sin(alphaL);
- Serial.println(x,DEC);
- Serial.println(y,DEC);
-}
-*/

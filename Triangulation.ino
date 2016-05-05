@@ -32,11 +32,11 @@ void Triangulate (int ref1, int ref2)  {
  }*/
  
  LocationFound = 1;
-// Serial.print("Location: ");
-// Serial.print(xCoordinate);
-// Serial.print(", ");
-// Serial.print(yCoordinate);
-// Serial.print(", ");
-// Serial.println(xCoordinate1);
+Serial.print("Location: ");
+Serial.print(xCoordinate1);
+ Serial.print(", ");
+ Serial.println(yCoordinate);
+ Serial.print(", ");
+ //Serial.println(xCoordinate);
  delay(5000);
 }
